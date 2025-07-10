@@ -1,0 +1,82 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+    <body>
+        <div class="new-main offset-2">
+            <h3>New Listing</h3>
+            <form action="/listing" method="POST" novalidate class="needs-validation">
+
+                <div class="row">
+                    <div class="col-8 ">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title:</label>
+                            <input class="form-control" type="text" name="title" placeholder="Add a catchy  name"
+                                required>
+                            <div class="valid-feedback">
+                                Title looks Good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Title is not provided!
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description:</label>
+                            <textarea class="form-control" name="description" required></textarea>
+                            <div class="valid-feedback">
+                                Great!
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label" for="location">Location:</label>
+                            <input placeholder="Jaipur" class="form-control" type="text" name="location" required>
+                            <div class="invalid-feedback">
+                                Enter Valid Location
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="price" value="enter price" class="form-label">Price:</label>
+                                    <input placeholder="1200" class="form-control" type="number"  name="price" required>
+                                    <div class="invalid-feedback">
+                                        Price is not valid
+                                    </div>
+              
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="mb-3">
+                                    <label for="country" value="enter country" class="form-label">Country:</label>
+                                    <input placeholder="India" class="form-control" type="text" name="country" required>
+                                    <div class="invalid-feedback">
+                                        Please select valid Country
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image-url:</label>
+                            <input class="form-control" type="url"  name="image[url]"   value   ="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWlufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60">
+
+                        </div>
+
+                        <div class="mb-3 add-btn">
+                            <button class="btn btn-primary  button">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+        </div>
+    </body>

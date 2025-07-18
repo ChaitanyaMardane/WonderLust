@@ -1,111 +1,58 @@
-const express= require("express");
-const router= express.Router();
+const express = require("express");
+const router = express.Router();
 const Listing = require("../models/listing");
+const listing = require("../controller/listing.js")
 
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require('../ExpressErrors/ExpressErrors.js');
 const passport = require("passport");
-const { isLoggedin ,isOwner} = require("../middleware.js");
+const { isLoggedin, isOwner } = require("../middleware.js");
 const { validateListings } = require("../middleware.js");
 
 
+// To avoid using same path for multiple routes we can use router.route
+//Index  //New And Create Routes
+router.get("/new", isLoggedin, listing.new);
+router
+    .route("/")
+    .get(wrapAsync(listing.index))
+    .post(isLoggedin, validateListings, wrapAsync(listing.create));
 
 
 
-//Routes
 
-router.get("/",wrapAsync(async (req,res)=>{
-    let listings= await Listing.find({});
-    res.render("Listing/index",{listings})
-}))
+router.route("/:id")
+    .get(wrapAsync(listing.show))
+    .put(isLoggedin, isOwner, validateListings, wrapAsync(listing.update))
+    .delete(isLoggedin, isOwner, wrapAsync(listing.delete));
 
-//New And Create Routes
-router.get("/new",
-    isLoggedin,
-    (req, res)=>{
-   
-    res.render("Listing/new.ejs");
-})
-router.post("/",
-    isLoggedin,
-    validateListings,
-    wrapAsync(async (req,res)=>{
-    let listing = req.body;
-    listing.image = {
-        filename: "listingimage",
-        url: listing.image.url,
-    };
-    listing.owner = req.user.id; // Set the owner 
-    console.log(listing.owner);
-    
-    await Listing.create(listing);
-    // console.log(listing);
-    req.flash("success","New listing  is successfully created ")
-    res.redirect("/listing");
-   
-}))
-//Show Route
 
-router.get("/:id",
-    wrapAsync(async(req, res)=>{
-    let id=req.params.id;
-    let listing= await Listing.findById(id).populate({path:"reviews",populate:{path:"author"}}).populate("owner")
-    // console.log(listing);
-    if(!listing) {
-        req.flash("error","Listing does not exist");
-        res.redirect("/listing")
-    }
-    for(let review of listing.reviews){
-        console.log(review.author);
-    }
+    //Edit and 
+router.get("/:id/edit",isLoggedin,isOwner,wrapAsync(listing.edit));
 
-    res.render("Listing/show.ejs",{listing});
-})) 
 
-//Edit and Update Route
-router.get("/:id/edit",
-    isLoggedin,
-    isOwner,
-    wrapAsync(async (req,res)=>{
-    let id = req.params.id;
-    let listing= await Listing.findById(id);
-  
-    
-    res.render("Listing/edit.ejs",{listing});
-}))
 
-router.put("/:id",
-    isLoggedin,
-    isOwner,
-    validateListings,
-    wrapAsync(async (req,res)=>{
-        const {id} = req.params;
-        const listing = req.body;
-        listing.image = {
-            filename: "listingimage",
-            url: listing.image.url
-        };
-        
-    await Listing.findByIdAndUpdate(id, { ...listing }, { runValidators: true });
-    req.flash("success","Listing is updated");
-    res.redirect(`/listing/${id}`);
 
-}))
+// //Index
+// router.get("/", wrapAsync(listing.index))
+
+// //New And Create Routes
+// router.get("/new", isLoggedin, listing.new);
+
+// Create Routes
+// router.post("/",isLoggedin,validateListings,wrapAsync(listing.create));
+
+// //Show Route
+// router.get("/:id", wrapAsync(listing.show))
+
+
+// //Update Route
+// router.put("/:id",isLoggedin,isOwner,validateListings,wrapAsync(listing.update));
 
 //Delete Route
-    // delete listing
-router.delete("/:id",
-    isLoggedin, 
-    isOwner, 
-    wrapAsync(async (req,res)=>{
-    let id = req.params.id;
-    await Listing.findByIdAndDelete(id);
-    req.flash("success","Listing is Deleted");
-    res.redirect("/listing");
-}) )
+// router.delete("/:id",isLoggedin,isOwner,wrapAsync(listing.delete));
 
 
 
-//Review Route
 
-module.exports= router;
+module.exports = router;

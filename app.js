@@ -11,7 +11,7 @@ const listing=require("./routes/listing.js");
 const review=require("./routes/review.js");
 const user=require("./routes/user.js");
 const session =require("express-session");
-const ExpressError = require('./ExpressErrors /ExpressErrors.js');
+const ExpressError = require('./ExpressErrors/ExpressErrors.js');
 const User=require("./models/user.js");
 const passport =require("passport");
 const LocalStrategy=require("passport-local");
@@ -56,7 +56,7 @@ app.use((req,res,next)=>{
     res.locals.failure=req.flash("error");
     res.locals.currUser = req.user;
 
-//    console.log(req.user);
+   console.log(req.user + " hello");
    
     
 
@@ -95,5 +95,5 @@ app.listen(8080,()=>{
     console.log("app is listening at http://localhost:8080/listing/");
      
 
-}) 
+})
 

@@ -3,7 +3,7 @@
     <body>
         <div class="new-main offset-2">
             <h3>New Listing</h3>
-            <form action="/listing" method="POST" novalidate class="needs-validation">
+            <form action="/listing" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
 
                 <div class="row">
                     <div class="col-8 ">
@@ -65,13 +65,13 @@
 
 
                         <div class="mb-3">
-                            <label for="image" class="form-label">Image-url:</label>
-                            <input class="form-control" type="url"  name="image[url]"   value   ="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWlufGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60">
+                            <label for="image[url]" class="form-label">Upload Image</label>
+                            <input class="form-control" type="file"  name="image[url]"   value   ="">
 
                         </div>
 
                         <div class="mb-3 add-btn">
-                            <button class="btn btn-primary  button">Add</button>
+                            <button class="btn btn-primary  s-edit-btn">Add</button>
                         </div>
                     </div>
                 </div>

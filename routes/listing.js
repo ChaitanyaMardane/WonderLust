@@ -8,6 +8,12 @@ const ExpressError = require('../ExpressErrors/ExpressErrors.js');
 const passport = require("passport");
 const { isLoggedin, isOwner } = require("../middleware.js");
 const { validateListings } = require("../middleware.js");
+// const multer  = require('multer')
+// const upload = multer({ dest: 'uploads/' })
+const multer = require('multer');
+const { storage } = require('../cloudinary.js'); // adjust path as needed
+
+const upload = multer({ storage });
 
 
 // To avoid using same path for multiple routes we can use router.route
@@ -16,14 +22,21 @@ router.get("/new", isLoggedin, listing.new);
 router
     .route("/")
     .get(wrapAsync(listing.index))
-    .post(isLoggedin, validateListings, wrapAsync(listing.create));
+    .post(isLoggedin,  upload.single('image[url]',{
+        transform: [
+            
+        ]
+    }), 
+     // 'image' is the field name in the form
+    validateListings, wrapAsync(listing.create));
+
 
 
 
 
 router.route("/:id")
     .get(wrapAsync(listing.show))
-    .put(isLoggedin, isOwner, validateListings, wrapAsync(listing.update))
+    .put(isLoggedin, isOwner,upload.single('image[url]'),validateListings, wrapAsync(listing.update))
     .delete(isLoggedin, isOwner, wrapAsync(listing.delete));
 
 

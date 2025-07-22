@@ -1,4 +1,6 @@
-const express= require("express");
+require('dotenv').config();
+const express= require("express");7
+
 const ejsMate=require("ejs-mate");
 const { default: mongoose } = require("mongoose");
 const app=express();
@@ -11,6 +13,7 @@ const listing=require("./routes/listing.js");
 const review=require("./routes/review.js");
 const user=require("./routes/user.js");
 const session =require("express-session");
+const MongoStore = require('connect-mongo');
 const ExpressError = require('./ExpressErrors/ExpressErrors.js');
 const User=require("./models/user.js");
 const passport =require("passport");
@@ -19,7 +22,7 @@ const LocalStrategy=require("passport-local");
 
 
 app.use(methodOverride("_method"));
-const MONGO_URL="mongodb://localhost:27017/wonderlust"
+const db_URL=process.env.ATLAS_URI ;
 app.set("views", path.join(__dirname,"views"));
 app.set("view engine","ejs");
 app.use(express.urlencoded({extended : true}));
@@ -28,7 +31,7 @@ app.use(express.static(path.join(__dirname,"public")));
 
 
 async function  main(){
-    await mongoose.connect(MONGO_URL)
+    await mongoose.connect(db_URL)
 }
 main().then(()=>{
     console.log("connect to DB")
@@ -37,7 +40,19 @@ main().then(()=>{
     console.log(err);
     
 });
+const store = MongoStore.create({
+    mongoUrl: db_URL,
+    touchAfter: 24 * 3600, // time period in seconds
+    crypto: {
+        secret: "MysecretCode"
+    }
+});
+store.on("error",  ()=> {
+    console.log("Error in session store: "+error);
+});
+
  const sessionOptions={
+    store,
     secret:"MysecretCode",
     resave:false,
     saveUninitialized:true,

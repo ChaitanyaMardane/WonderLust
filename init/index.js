@@ -14,6 +14,8 @@ async function  main(){
     await mongoose.connect(MONGO_URL)
 }
  async function initDB(){
+    await Listing.deleteMany({});
+    console.log("Deleted all existing listings");
    data = data.map(listing => ({
         ...listing,
         owner: "68555a70c5cfce6e039a08ba"

@@ -74,7 +74,7 @@ body{
     border-radius:1rem !important;
     width: 100%;
     height: 15rem !important;
-    object-fit: cover;
+    object-fit:fill;
 }
 .card-body{
     padding: 0.5rem;
@@ -88,17 +88,21 @@ font-weight: 400;}
 }
 .card:hover .card-img-overlay{
     opacity: 0.2;
-    background-color: #ffffff !important;
+    background-color: #b0b0b0!important;
 }
 
 .button{
     border: none !important;
-    background-color: #fe424d !important;
+    background-color:#dbd6d6!important;
 }
 .new-main{
     margin:2rem;
 }
-
+.s-edit-btn {
+        background-color: #fe424d !important;
+        color: #fff !important;
+        
+    }
 .s-delete-btn{
     color: #ffffff !important;
 }

@@ -1,4 +1,5 @@
 
+const { cloudinary } = require("../cloudinary");
 const Listing = require("../models/listing")
 module.exports.index = async (req,res)=>{
     let listings= await Listing.find({});
@@ -13,14 +14,16 @@ module.exports.new = (req, res)=>{
 
 
 module.exports.create= async (req,res)=>{
-    let listing = req.body;
-    listing.image = {
-        filename: "listingimage",
-        url: listing.image.url,
-    };
-    listing.owner = req.user.id; // Set the owner 
-    console.log(listing.owner);
     
+if(req.file){
+    req.body.image = {
+        filename: req.file.filename, // Assuming req.file is set by multer
+       url: req.file.path // Assuming req.file is set by multer
+    };
+}
+    let listing = req.body;
+    listing.owner = req.user.id; // Set the owner
+
     await Listing.create(listing);
     // console.log(listing);
     req.flash("success","New listing  is successfully created ")
@@ -54,22 +57,41 @@ module.exports.show= async(req, res)=>{
 module.exports.edit= async (req,res)=>{
     let id = req.params.id;
     let listing= await Listing.findById(id);
-  
-    
-    res.render("Listing/edit.ejs",{listing});
+  if(!listing) {
+        req.flash("error","Listing does not exist");
+        res.redirect("/listing")
+    }
+
+    let originalImage = listing.image.url; // Store the original image URL
+    originalImage = originalImage.replace("/upload", '/upload/c_fill,w_250,h_300,f_auto,q_auto'); // Adjust the URL for display
+    console.log(originalImage);
+
+    res.render("Listing/edit.ejs",{listing, originalImage});
 }
 
 //-------------------------------------------------------------------------------------
 
 module.exports.update= async (req,res)=>{
         const {id} = req.params;
-        const listing = req.body;
-        listing.image = {
-            filename: "listingimage",
-            url: listing.image.url
-        };
+    let listing= await Listing.findByIdAndUpdate(id, { ...req.body }, { runValidators: true });
+
+        if(req.file){
+    // If an image is uploaded, update the image field
+    //delete the old image if necessary
+    if(listing.image && listing.image.filename){
+        cloudinary.uploader.destroy(listing.image.filename);
+        console.log("Old image deleted (if applicable)");
+    }
+    listing.image = {
+        filename: req.file.filename, // Assuming req.file is set by multer
+       url: req.file.path // Assuming req.file is set by multer
+    };
+    await listing.save();
+    console.log("Image updated successfully");
+}
+       
+      
         
-    await Listing.findByIdAndUpdate(id, { ...listing }, { runValidators: true });
     req.flash("success","Listing is updated");
     res.redirect(`/listing/${id}`);
 

@@ -5,7 +5,7 @@ const ExpressError = require('./ExpressErrors/ExpressErrors.js');
 const { listingSchema, reviewSchema } = require("./schema.js");
 module.exports.isLoggedin=(req ,res ,next)=>{
           req.session.redirectedUrl=req.originalUrl;
-    console.log(req.originalUrl)
+    // console.log(req.originalUrl)
     if(!req.isAuthenticated()){
     
     req.flash("error","You are not registered")
@@ -45,8 +45,9 @@ module.exports.isOwner=(req,res,next)=>{
 }
 
 module.exports.validateListings = (req,res,next)=>{
-    console.log(req.body);
-
+  console.log("Validating listing data...");
+  
+  
     const {error}=listingSchema.validate(req.body ,{ abortEarly: false });
     if(error){
         const msg=error.details.map((el)=>el.message).join(",");

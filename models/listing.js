@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Review = require("./review.js")
 const User = require("./user.js")
+
 const listingSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -11,15 +12,15 @@ const listingSchema = new mongoose.Schema({
     image: {
         filename: {
             type: String,
-            set : (v)=> v==""? "listingimage": v,
-            default: "listingimage",
+            
         },
         url: {
             type: String,
-            set: (v) => (!v || v === "") 
-                ? "https://unsplash.com/photos/a-house-with-a-blue-front-door-and-a-brown-front-door-xaqsFfoEq3o"
-                : v,
-            default: "https://unsplash.com/photos/a-house-with-a-blue-front-door-and-a-brown-front-door-xaqsFfoEq3o",
+            
+            // set: (v) => (!v || v ==="") 
+            //     ? "https://unsplash.com/photos/a-house-with-a-blue-front-door-and-a-brown-front-door-xaqsFfoEq3o"
+            //     : v,
+            // default: "https://unsplash.com/photos/a-house-with-a-blue-front-door-and-a-brown-front-door-xaqsFfoEq3o",
         }
         
     },

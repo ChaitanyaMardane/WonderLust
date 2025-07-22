@@ -44,7 +44,7 @@ const store = MongoStore.create({
     mongoUrl: db_URL,
     touchAfter: 24 * 3600, // time period in seconds
     crypto: {
-        secret: "MysecretCode"
+        secret:process.env.SECRET,
     }
 });
 store.on("error",  ()=> {
@@ -53,7 +53,7 @@ store.on("error",  ()=> {
 
  const sessionOptions={
     store,
-    secret:"MysecretCode",
+    secret:process.env.SECRET,
     resave:false,
     saveUninitialized:true,
     cookie:{

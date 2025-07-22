@@ -83,7 +83,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 
-app.use("https://wonderlust-chaitanya.onrender.com/",(req,res)=>{
+app.use("/",(req,res)=>{
     res.render("Listing/index.ejs");
 })
 app.use("/listing",listing)
@@ -92,9 +92,9 @@ app.use("/",user);
 
 
 
-// app.all("*",(req,res,next)=>{
-//     next(new ExpressError(404,'Page Not Found'))
-// })
+app.all("*",(req,res,next)=>{
+    next(new ExpressError(404,'Page Not Found'))
+})
 app.use((err,req,res,next)=>{
     let {statuscode=500,message="Something Went Wrong"}=err;
     console.log(err.stack);

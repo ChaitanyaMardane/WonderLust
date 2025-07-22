@@ -83,7 +83,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 
-app.use("/",(req,res)=>{
+app.get("/",(req,res)=>{
     res.render("Listing/index.ejs");
 })
 app.use("/listing",listing)

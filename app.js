@@ -83,7 +83,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 
-app.get("/",(req,res)=>{
+app.get("https://wonderlust-chaitanya.onrender.com/",(req,res)=>{
     res.render("Listing/index.ejs");
 })
 app.use("/listing",listing)

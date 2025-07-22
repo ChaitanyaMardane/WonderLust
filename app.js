@@ -83,9 +83,9 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 
-app.get("https://wonderlust-chaitanya.onrender.com/",(req,res)=>{
-    res.render("Listing/index.ejs");
-})
+app.get("/",(req,res)=>{
+    res.redirect("/listing");
+});
 app.use("/listing",listing)
 app.use("/listing/:id/review",review)
 app.use("/",user);
